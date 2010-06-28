@@ -1,0 +1,6 @@
+# temporary files
+*~
+*.o
+*.hi
+
+.*.swp
