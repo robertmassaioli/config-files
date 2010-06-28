@@ -1,0 +1,11 @@
+# temp files
+*~
+.*.swp
+
+# haskell files
+*.hi
+*.o
+
+# xmonad files
+*.errors
+xmonad-*-linux
