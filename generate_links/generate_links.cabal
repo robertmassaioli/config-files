@@ -51,7 +51,7 @@ Executable generate_links
   Main-is: Main.hs
   
   -- Packages needed in order to build this package.
-  Build-depends: base, bytestring, directory, unix
+  Build-depends: base, bytestring, directory, unix, filepath, delimited-text
   
   -- Modules not exported by this package.
   -- Other-modules:       

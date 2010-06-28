@@ -1,1 +1,8 @@
-xmonad|~/.xmonad
+./xmonad|~/.xmonad
+./xmonad/xmobarrc|~/.xmobarrc
+./bashrc|~/.bashrc
+./bash_aliases|~/.bash_aliases
+./gitconfig|~/.gitconfig
+./irssi|~/.irssi
+./profile|~/.profile
+./vimrc|~/.vimrc

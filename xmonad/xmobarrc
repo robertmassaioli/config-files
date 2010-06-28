@@ -14,7 +14,7 @@ Config { font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
                                    ] 10
                     , Run Memory ["-t","Mem: <used>/<total> (<usedratio>%)"] 10
                     , Run Swap [] 10
-                    , Run Com "uname" ["-s","-r","-n"] "" 36000
+                    --, Run Com "uname" ["-s","-r","-n"] "" 36000
                     , Run Date "%a %b %_d %Y %p %I:%M:%S" "date" 10
                     , Run StdinReader
                     , Run Battery [
@@ -28,6 +28,6 @@ Config { font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%multicpu% | %memory% * %swap% | %StdinReader% }{ %mpd% | <fc=#d843e1>%eth0%</fc> - <fc=#d843e1>%wlan0wi%</fc> | <fc=#ee9a00>%date%</fc> | %battery% | %uname%"
+       , template = "%multicpu% | %memory% * %swap% | %StdinReader% }{ %mpd% | <fc=#d843e1>%eth0%</fc> - <fc=#d843e1>%wlan0wi%</fc> | <fc=#ee9a00>%date%</fc> | %battery%"
        }
 --[ Run Weather "YSSY" ["-t","<station>: <tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
