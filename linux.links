@@ -6,3 +6,5 @@
 ./irssi|~/.irssi
 ./profile|~/.profile
 ./vimrc|~/.vimrc
+./xmodmap|~/.xmodmap
+./xsettings|~/.xsettings
