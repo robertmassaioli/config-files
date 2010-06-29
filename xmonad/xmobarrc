@@ -12,9 +12,15 @@ Config { font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
                                         "--high","red",
                                         "--template", "Cpu0: <total0> Cpu1: <total1>"
                                    ] 10
-                    , Run Memory ["-t","Mem: <used>/<total> (<usedratio>%)"] 10
+                    , Run Memory    [
+                                        "-t","Mem: <used>/<total> (<usedratio>%)"
+                                        , "-L", "400"
+                                        , "-H", "1500"
+                                        , "--normal", "yellow"
+                                        , "--high", "red"
+                                        , "--low", "green"
+                                    ] 10
                     , Run Swap [] 10
-                    --, Run Com "uname" ["-s","-r","-n"] "" 36000
                     , Run Date "%a %b %_d %Y %p %I:%M:%S" "date" 10
                     , Run StdinReader
                     , Run Battery [
@@ -24,10 +30,9 @@ Config { font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
                                     "--normal","yellow",
                                     "--high","green"
                                   ] 30
-                    , Run MPD ["-t","mpd: <title> (<lapsed>/<length>) <statei>"] 10
+                    , Run MPD ["-t","<fc=#00ff67>mpd: <title></fc> <fc=#00ceff>[<lapsed></fc><fc=#00b8ff>/</fc><fc=#005bff><length>]</fc> <statei>"] 10
                     ]
        , sepChar = "%"
        , alignSep = "}{"
        , template = "%multicpu% | %memory% * %swap% | %StdinReader% }{ %mpd% | <fc=#d843e1>%eth0%</fc> - <fc=#d843e1>%wlan0wi%</fc> | <fc=#ee9a00>%date%</fc> | %battery%"
        }
---[ Run Weather "YSSY" ["-t","<station>: <tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
