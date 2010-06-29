@@ -1,0 +1,4 @@
+download_script.php?src_id=12537: call delete('/home/robert/.vim/compiler/hlint.vim')
+download_script.php?src_id=12173: call delete('/home/robert/.vim/ftdetect/cabal.vim')|call delete('/home/robert/.vim/syntax/cabal.vim')
+haskellmode-20090430.vba: call delete('/home/robert/.vim/compiler/ghc.vim')|call delete('/home/robert/.vim/ftplugin/haskell.vim')|call delete('/home/robert/.vim/ftplugin/haskell_doc.vim')|call delete('/home/robert/.vim/ftplugin/haskell_hpaste.vim')|call delete('/home/robert/.vim/autoload/haskellmode.vim')|call delete('/home/robert/.vim/doc/haskellmode.txt')
+supertab.vba: call delete('/home/robert/.vim/doc/supertab.txt')|call delete('/home/robert/.vim/plugin/supertab.vim')

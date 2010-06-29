@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/robert/Videos'
+let g:netrw_dirhist_2='/home/robert/Desktop'
+let g:netrw_dirhist_3='/home/robert/University/10/cs3891/asst2-src/user/testbin/forktest'
+let g:netrw_dirhist_4='/home/robert/Code/Haskell/my_code/hiCal'
+let g:netrw_dirhist_5='/home/robert/Code/Haskell/recompiled_code/xmobar/Plugins/Monitors'

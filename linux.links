@@ -6,5 +6,9 @@
 ./irssi|~/.irssi
 ./profile|~/.profile
 ./vimrc|~/.vimrc
+./vim|~/.vim
 ./xmodmap|~/.xmodmap
 ./xsettings|~/.xsettings
+./sqliterc|~/.sqliterc
+./ghci|~/.ghci
+./gdbinit|~/.gdbinit

@@ -1,0 +1,1 @@
+/home/robert/Code/Vim/dotrc/vim/syntax/haskell.vim
