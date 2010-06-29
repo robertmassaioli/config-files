@@ -1,0 +1,6 @@
+# All of the cabal folders
+bin
+lib
+logs
+packages
+share
