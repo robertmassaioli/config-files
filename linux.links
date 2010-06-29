@@ -12,4 +12,4 @@
 ./sqliterc|~/.sqliterc
 ./ghci|~/.ghci
 ./gdbinit|~/.gdbinit
-./cabal|~/.cabal
+./cabal/config|~/.cabal/config
