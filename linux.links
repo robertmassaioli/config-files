@@ -12,3 +12,4 @@
 ./sqliterc|~/.sqliterc
 ./ghci|~/.ghci
 ./gdbinit|~/.gdbinit
+./cabal|~/.cabal
