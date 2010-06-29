@@ -7,5 +7,5 @@ links=`cut -d\| -f2 "$1" | sed "s#^~#$homeDir#g"`
 
 for i in $links
 do
-    rm "$i"
+    rm -fr "$i"
 done
