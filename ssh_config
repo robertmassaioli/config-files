@@ -1,0 +1,23 @@
+Host home
+HostName 192.168.0.97
+User robert
+
+Host homeAway
+HostName massaioli.homelinux.com
+User robert
+
+Host csesoc
+HostName csesoc-server.cse.unsw.edu.au
+User robertm
+
+Host unicsesoc
+HostName cse.unsw.edu.au
+User csesoc
+
+Host uni
+HostName cse.unsw.edu.au
+User robertm
+
+Host alioth
+HostName collab-maint.alioth.debian.org
+User robertmassaioli-guest

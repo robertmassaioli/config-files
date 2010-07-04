@@ -4,8 +4,8 @@
 -- XMonad configuration file by Thomas ten Cate <ttencate@gmail.com>
 -- Edited and extended by Robert Massaioli <robertmassaioli@gmail.com>
 -- 
--- Works on xmonad-0.8, NOT on 0.7 or below; and of course
--- xmonad-contrib needs to be installed as well
+-- Works on whatever XMonad that I happen to be running, usually the latest one.
+-- You will need xmonad-contrib and maybe more.
 --
 -- This is designed to play nice with a standard Ubuntu Hardy installation.
 -- For more explanation please see the readme on github robertmassaioli/xmonad.hs
@@ -165,6 +165,9 @@ myKeys conf = M.fromList $
     , ((myModMask               , xK_Page_Up), spawn "mpc next")
     , ((myModMask               , xK_Page_Down), spawn "mpc prev")
     , ((myModMask               , xK_Pause), spawn "mpc toggle")
+    -- Volume Commands
+    , ((myModMask               , xK_Home), spawn "amixer -c0 -- sset Master Playback 2dB+")
+    , ((myModMask               , xK_End), spawn "amixer -c0 -- sset Master Playback 2dB-")
     -- Open Browser
     , ((myModMask              , xK_x         ), spawn browserCmd)
     -- Alt + Ctrl Left / Right makes the view go left and right

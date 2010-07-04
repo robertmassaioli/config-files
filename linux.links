@@ -13,3 +13,4 @@
 ./ghci|~/.ghci
 ./gdbinit|~/.gdbinit
 ./cabal/config|~/.cabal/config
+./ssh_config|~/.ssh/config
