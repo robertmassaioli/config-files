@@ -53,8 +53,8 @@ myFocusedBorderColor = "purple"
  
 -- workspaces
 --myWorkspaces = ["web", "editor", "terms"] ++ (miscs 7) ++ ["fullscreen", "im"]
-myWorkspaces = ["web"] ++ (miscs 9) ++ ["fullscreen", "im"]
-    where miscs = map (("misc" ++) . show) . (flip take) [1..]
+yWorkspaces = miscs 12
+    where miscs = map show . (flip take) [1..]
 isFullscreen = (== "fullscreen")
  
 -- layouts
@@ -81,7 +81,7 @@ imLayout = avoidStruts . reflectHoriz $ withIMs ratio rosters chatLayout
 myLayoutHook screens = fullscreen $ im $ normal 
   where
     normal     = tallLayout ||| wideLayout ||| singleLayout
-    fullscreen = onWorkspaces (withScreens screens ["fullscreen"]) fullscreenLayout
+    fullscreen = onWorkspaces (withScreens screens ["11"]) fullscreenLayout
     im         = onWorkspace "im" imLayout
  
 -- special treatment for specific windows:

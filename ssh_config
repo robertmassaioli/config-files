@@ -21,3 +21,11 @@ User robertm
 Host alioth
 HostName collab-maint.alioth.debian.org
 User robertmassaioli-guest
+
+Host blossom
+HostName 216.119.130.194
+User blossom
+Port 7822
+
+Host *
+    ForwardAgent yes
