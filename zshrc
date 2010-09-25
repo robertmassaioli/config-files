@@ -23,31 +23,32 @@ bindkey -e
 setopt extendedglob
 unsetopt CASE_GLOB
 
-alias -g a="ls -1sh --color"
-alias -g :x="exit"
-alias -g :q="exit"
-alias -g amplayer='mplayer -vo none'
-alias -g apts='aptitude search'
-alias -g egrep='egrep --color=auto'
-alias -g grep='grep --color=auto'
-# alias -g ls='ls --color=auto'
-alias -g lss='ls -Srsh -1'
-alias -g make='make -j4'
-alias -g mapdvp='setxkbmap -layout us -variant dvp'
-alias -g mapus='setxkbmap us'
-alias -g sagp='sudo apt-get purge'
-alias -g sagr='sudo apt-get remove'
-alias -g sai='sudo apt-get install'
-alias -g sl='svn log -l'
-alias -g svim='sudo vim'
-alias -g todoc='todo +children'
-alias -g up='sudo apt-get update && sudo apt-get upgrade'
-alias -g wake-server='wakeonlan 00:02:3f:16:16:ab'
+alias a="ls -1sh --color"
+alias :x="exit"
+alias :q="exit"
+alias amplayer='mplayer -vo none'
+alias apts='aptitude search'
+alias egrep='egrep --color=auto'
+alias grep='grep --color=auto'
+alias ls='ls --color=auto'
+alias lss='ls -Srsh -1'
+alias make='make -j4'
+alias mapdvp='setxkbmap -layout us -variant dvp'
+alias mapus='setxkbmap us'
+alias sagp='sudo apt-get purge'
+alias sagr='sudo apt-get remove'
+alias sai='sudo apt-get install'
+alias sl='svn log -l'
+alias svim='sudo vim'
+alias todoc='todo +children'
+alias up='sudo apt-get update && sudo apt-get upgrade'
+alias wake-server='wakeonlan 00:02:3f:16:16:ab'
+alias screens='screen -list'
+alias mutt='mutt -f email'
+alias xs='~/.xsettings'
 
 # Suffix Aliases
 alias -s -- txt='vim'
 alias -s -- hs='vim'
 alias -s -- c='vim'
 alias -s -- h='vim'
-
-export PATH=$PATH:/var/lib/gems/1.8/bin/

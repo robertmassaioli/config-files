@@ -67,7 +67,7 @@ if has("autocmd")
   au!
 
   " For all text files set 'textwidth' to 78 characters.
-  autocmd FileType text setlocal textwidth=78
+  autocmd FileType text setlocal textwidth=100
 
   " When editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler
@@ -83,6 +83,7 @@ if has("autocmd")
 
 endif " has("autocmd")
 
+set textwidth=100
 set autoindent		" always set autoindenting on
 
 " Convenient command to see the difference between the current buffer and the
@@ -112,22 +113,7 @@ let g:haddock_browser = "/usr/bin/google-chrome"
 let g:haddock_docdir = "/usr/share/doc/ghc6-doc/html/"
 let g:ghc = "/usr/bin/ghc"
 
-ino ;; <esc>
-cno ;; <c-c>
-
 " For dvorak
-no h h
-no t j
-no n k
-no s l
-"no c :
-"no c :
-"no j d
-no l n
-no L N
-" Dvorak Bonus
-no - $
-no _ ^
 
 " Turn off highlighting with space
 :nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>

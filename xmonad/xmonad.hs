@@ -53,7 +53,7 @@ myFocusedBorderColor = "purple"
  
 -- workspaces
 --myWorkspaces = ["web", "editor", "terms"] ++ (miscs 7) ++ ["fullscreen", "im"]
-yWorkspaces = miscs 12
+myWorkspaces = miscs 12
     where miscs = map show . (flip take) [1..]
 isFullscreen = (== "fullscreen")
  
