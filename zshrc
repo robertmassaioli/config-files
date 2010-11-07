@@ -1,11 +1,12 @@
 # The following lines were added by compinstall
+
 zstyle :compinstall filename '/home/robert/.zshrc'
 
 setopt promptsubst
 
 autoload -U promptinit
 promptinit
-
+ 
 prompt wunjo
 
 autoload -Uz compinit
@@ -41,14 +42,19 @@ alias sai='sudo apt-get install'
 alias sl='svn log -l'
 alias svim='sudo vim'
 alias todoc='todo +children'
-alias up='sudo apt-get update && sudo apt-get upgrade'
+alias up='sudo apt-get update && yes | sudo apt-get upgrade'
 alias wake-server='wakeonlan 00:02:3f:16:16:ab'
 alias screens='screen -list'
 alias mutt='mutt -f email'
 alias xs='~/.xsettings'
+alias p='pushd'
+alias o='popd'
+alias dirs='dirs -v'
 
 # Suffix Aliases
 alias -s -- txt='vim'
 alias -s -- hs='vim'
 alias -s -- c='vim'
 alias -s -- h='vim'
+
+#export EDITOR="/usr/local/bin/vim"
