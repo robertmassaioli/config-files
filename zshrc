@@ -50,6 +50,7 @@ alias xs='~/.xsettings'
 alias p='pushd'
 alias o='popd'
 alias dirs='dirs -v'
+alias last='last -a'
 
 # Suffix Aliases
 alias -s -- txt='vim'
