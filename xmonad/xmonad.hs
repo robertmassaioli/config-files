@@ -7,8 +7,10 @@
 -- Works on whatever XMonad that I happen to be running, usually the latest one.
 -- You will need xmonad-contrib and maybe more.
 --
--- This is designed to play nice with a standard Ubuntu Hardy installation.
--- For more explanation please see the readme on github robertmassaioli/xmonad.hs
+-- This is designed to play nice with a standard Ubuntu installation.
+--
+-- WARNING: On my computers I swap CapsLock and BackSpace around so if you don't then you will need
+-- to swap those around in this config.
  
 import XMonad
 import XMonad.Util.EZConfig
@@ -31,16 +33,23 @@ import Control.Monad
 import Data.Ratio
 import qualified Data.Map as M
 import XMonad.Util.Run
-import XMonad.Hooks.DynamicLog
+import XMonad.Util.Dmenu
+import XMonad.Util.Dzen 
+import XMonad.Hooks.DynamicLog (dynamicLogXinerama, xmobar)
 import XMonad.Actions.FindEmptyWorkspace
 import XMonad.Layout.IndependentScreens
 import XMonad.Actions.Warp
 import XMonad.Hooks.UrgencyHook
 import System.Exit
 
--- TODO Bitlbee
--- TODO Stack for pushing and popping windows so that I only have to deal with as many as I want to.
- 
+import XMonad.Prompt
+import XMonad.Actions.TagWindows
+
+import XMonad.Actions.OnScreen (greedyViewOnScreen, viewOnScreen)
+import Data.Maybe (fromMaybe)
+
+import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
+
 -- defaults on which we build
 -- use e.g. defaultConfig or gnomeConfig
 myBaseConfig = gnomeConfig
@@ -52,10 +61,7 @@ myNormalBorderColor = "white"
 myFocusedBorderColor = "purple"
  
 -- workspaces
---myWorkspaces = ["web", "editor", "terms"] ++ (miscs 7) ++ ["fullscreen", "im"]
-myWorkspaces = miscs 12
-    where miscs = map show . (flip take) [1..]
-isFullscreen = (== "fullscreen")
+myWorkspaces = map show [1..12]
  
 -- layouts
 basicLayout = Tall nmaster delta ratio 
@@ -73,59 +79,62 @@ imLayout = avoidStruts . reflectHoriz $ withIMs ratio rosters chatLayout
     ratio           = 1 % 6
     rosters         = [skypeRoster, pidginRoster]
     pidginRoster    = And (ClassName "Pidgin") (Role "buddy_list")
-    skypeRoster     = (ClassName "Skype") `And` 
-                      (Not (Title "Options")) `And` 
-                      (Not (Role "Chats")) `And` 
-                      (Not (Role "CallWindowForm"))
+    skypeRoster     = ClassName "Skype" `And` 
+                      Not (Title "Options") `And` 
+                      Not (Role "Chats") `And` 
+                      Not (Role "CallWindowForm")
  
-myLayoutHook screens = fullscreen $ im $ normal 
+myLayoutHook screens = fullscreen $ im normal 
   where
     normal     = tallLayout ||| wideLayout ||| singleLayout
     fullscreen = onWorkspaces (withScreens screens ["11"]) fullscreenLayout
     im         = onWorkspace "im" imLayout
  
 -- special treatment for specific windows:
--- put the Pidgin and Skype windows in the im workspace
-myManageHook = imManageHooks <+> manageHook myBaseConfig
-  where
-    imManageHooks :: ManageHook
-    imManageHooks = composeAll [isIM --> moveToIM] 
-      where
-        isIM     = foldr1 (<||>) [isPidgin, isSkype]
-        isPidgin = className =? "Pidgin"
-        isSkype  = className =? "Skype"
-        moveToIM = doF $ S.shift "im"
+myManageHook = composeAll userDefinedHooks <+> manageHook myBaseConfig
+   where
+      userDefinedHooks =
+         [ webBrowserHook
+         , fileBrowserHook
+         , terminalHook
+         , imClientHook
+         , allowFullscreenHook
+         ]
+
+      isTerminal = isApplicationGroup ["Gnome-terminal"]
+      isIM     = isApplicationGroup ["Pidgin", "Skype"]
+      isWebBrowser = isApplicationGroup ["X-www-browser", "Google-chrome", "Firefox"]
+      isFileBrowser = isApplicationGroup ["Nautilus"]
+
+      isApplicationGroup :: [String] -> Query Bool
+      isApplicationGroup = foldr1 (<||>) . map (className =?)
+
+      imClientHook = isIM --> addTagsHook ["im_client"]
+      terminalHook = isTerminal --> addTagsHook ["terminal"]
+      webBrowserHook = isWebBrowser --> addTagsHook ["browser"]
+      fileBrowserHook = isFileBrowser --> addTagsHook ["file_browser"]
+
+      -- this will allow anything that says it is fullscreen to go fullscreen: like youtube videos
+      allowFullscreenHook = isFullscreen --> doFullFloat
+
+      addTagsHook :: [String] -> ManageHook
+      addTagsHook ts = do
+         window <- ask
+         liftX . sequence . fmap (flip addTag window) $ ts
+         idHook
  
 -- Mod4 is the Super / Windows key
 -- alt, is well...alt
 myModMask = mod4Mask
 altMask   = mod1Mask
  
-browserCmd :: String
-browserCmd = "x-www-browser"    -- set this up using 'update-alternatives --config x-www-browser' in the terminal
-{- 
- - You could also use the following if your system does not have update-alternatives:
- -    browserCmd = "firefox"
- -    browserCmd = "google-chrome"
+{-
+ - Default Spawn Commands
+ - Update these using update alternatives as in:
+ -    $ update-alternatives --config x-www-browser
  -}
-
--- I think this function can be written as a really nice fold but I cannot see how
--- it seems like I should be able to though.
-
--- Currently as well the keyMask affects the actual key that is pressed so even if we get a 
--- xK_a in dvorak for example, if we get a shiftMask then we should return different things for
--- the special keys there are keys that are common though so those should only be written once.
--- This should also be auto-generated from something else that is already done. Some other keyboard
--- mapping files.
-
-convertKeys :: (KeySym -> KeySym) -> [((KeyMask, KeySym), X ())] -> [((KeyMask, KeySym), X ())]
-convertKeys convertKey (((mod_key, key), action):rest) = 
-  ((mod_key, convertKey key), action) : convertKeys convertKey rest
-
-lookupKey :: M.Map KeySym KeySym -> KeySym -> KeySym
-lookupKey mapping key = case M.lookup key mapping of
-                          Just a -> a
-                          Nothing -> key
+myBrowser = "x-www-browser"   
+myTerminal = "x-terminal-emulator"
 
 -- choose which menu runs
 runMenu = spawn "dmenu_run"
@@ -133,18 +142,21 @@ runMenu = spawn "dmenu_run"
 
 -- better keybindings for dvorak
 myKeys conf = M.fromList $
-    [ ((myModMask              , xK_Return    ), spawn $ XMonad.terminal conf)
+    [ ((myModMask              , xK_Return    ), spawn myTerminal)
+    , ((myModMask              , xK_x         ), spawn myBrowser)
     , ((myModMask              , xK_r         ), runMenu)
     , ((myModMask              , xK_c         ), kill)
+    -- Empty Workspace Movement
     , ((altMask                , xK_space     ), viewEmptyWorkspace)
     , ((altMask .|. shiftMask  , xK_space     ), tagToEmptyWorkspace)
+    -- Layout Commands
     , ((myModMask              , xK_space     ), sendMessage NextLayout)
     , ((altMask                , xK_Return    ), sendMessage FirstLayout)
     , ((myModMask              , xK_n         ), refresh)
     , ((myModMask              , xK_m         ), windows S.swapMaster)
-    -- jumping bettween windows
-    , ((altMask                , xK_Tab       ), windows S.focusDown)
-    , ((altMask                , xK_BackSpace ), windows S.focusUp)
+    -- controlling window movement, position and location
+    , ((altMask                , xK_Tab       ), windows S.focusDown >> windowCenter)
+    , ((altMask                , xK_BackSpace ), windows S.focusUp >> windowCenter)
     , ((myModMask              , xK_Down      ), windows S.swapDown)
     , ((myModMask              , xK_Up        ), windows S.swapUp)
     , ((myModMask              , xK_Left      ), sendMessage Shrink)
@@ -152,25 +164,21 @@ myKeys conf = M.fromList $
     , ((myModMask              , xK_t         ), withFocused $ windows . S.sink)
     , ((myModMask              , xK_w         ), sendMessage (IncMasterN 1))
     , ((myModMask              , xK_v         ), sendMessage (IncMasterN (-1)))
+    -- Shutdown commands
     , ((myModMask              , xK_q         ), restart "xmonad" True)
-    , ((myModMask              , xK_h         ), spawn "pmi action hibernate")
+    , ((myModMask              , xK_h         ), spawn "gksudo pm-hibernate")
+    , ((myModMask .|. shiftMask, xK_q         ), spawn "gksudo shutdown -P now")
+    , ((myModMask .|. shiftMask, xK_w         ), spawn "gnome-screensaver-command -l")
     -- Print Screen
     , ((myModMask              , xK_Print     ), spawn "gnome-screenshot")
     , ((myModMask .|. shiftMask, xK_Print     ), spawn "gnome-screenshot -a")
-    -- Save Session
-    --, ((myModMask .|. shiftMask, xK_q         ), spawn "gnome-session-save --shutdown-dialog")
-    , ((myModMask .|. shiftMask, xK_q         ), io $ exitWith ExitSuccess)
-    , ((myModMask .|. shiftMask, xK_w         ), spawn "gnome-screensaver-command -l")
-    -- MPC commands
+    -- MPC and Volume commands
     , ((myModMask               , xK_Page_Up), spawn "mpc next")
     , ((myModMask               , xK_Page_Down), spawn "mpc prev")
     , ((myModMask               , xK_Pause), spawn "mpc toggle")
-    -- Volume Commands
     , ((myModMask               , xK_Home), spawn "amixer -c0 -- sset Master Playback 2dB+")
     , ((myModMask               , xK_End), spawn "amixer -c0 -- sset Master Playback 2dB-")
-    -- Open Browser
-    , ((myModMask              , xK_x         ), spawn browserCmd)
-    -- Alt + Ctrl Left / Right makes the view go left and right
+    -- Screen Movement
     , ((altMask .|. controlMask, xK_Left       ), prevScreen >> windowCenter)
     , ((altMask .|. controlMask, xK_Right      ), nextScreen >> windowCenter)
     , ((altMask .|. controlMask, xK_Down       ), shiftPrevScreen)
@@ -179,7 +187,11 @@ myKeys conf = M.fromList $
     , ((altMask .|. controlMask .|. shiftMask, xK_Up         ), shiftNextScreen >> nextScreen >> windowCenter)
     , ((altMask .|. controlMask .|. shiftMask, xK_Left     ), swapPrevScreen) -- this does not work properly
     , ((altMask .|. controlMask .|. shiftMask, xK_Right     ), swapNextScreen)
-    , ((myModMask               , xK_z         ), windowCenter)
+    , ((myModMask              , xK_z         ), windowCenter)
+    -- Tagging Windows
+    , ((myModMask              ,   xK_g  ), tagPrompt defaultXPConfig (withFocused . addTag))
+    , ((myModMask .|. shiftMask,   xK_g  ), tagDelPrompt defaultXPConfig)
+    , ((altMask                ,   xK_g  ), tagPrompt defaultXPConfig (`withTaggedGlobalP` gotoWindow))
     ] ++
     -- Alt+F1..F10 switches to workspace
     -- mod+F1..F10 moves window to workspace
@@ -190,7 +202,7 @@ myKeys conf = M.fromList $
         , (f, m) <- [(windowsGreedyView, altMask), (windowsShift, myModMask)]
     ] ++
     -- mod+alt+F1..F10 moves window to workspace and switches to that workspace
-    [ ((myModMask .|. altMask, k), (windowsShift i) >> (windowsGreedyView i) >> windowCenter) 
+    [ ((myModMask .|. altMask, k), windowsShift i >> windowsGreedyView i >> windowCenter) 
         | (i, k) <- zip (workspaces' conf) workspaceKeys
     ]
     where 
@@ -198,14 +210,22 @@ myKeys conf = M.fromList $
         windowsShift      = windows . onCurrentScreen S.shift
         windowsGreedyView = windows . onCurrentScreen S.greedyView
         windowCenter = warpToWindow (1 % 6) (1 % 6)
+
+        gotoWindow :: Window -> WindowSet -> WindowSet
+        gotoWindow window ws = case S.findTag window ws of
+                                 Just i -> viewOnScreen (screenIdFromTag i) i ws
+                                 Nothing -> ws
+            where
+               screenIdFromTag :: WorkspaceId -> ScreenId
+               screenIdFromTag = S . read . takeWhile (/= '_')
  
 -- mouse bindings that mimic Gnome's
-myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
-    [ ((altMask, button1), (\w -> focus w >> mouseMoveWindow w))
-    , ((altMask, button2), (\w -> focus w >> mouseResizeWindow w))
-    , ((altMask, button3), (\w -> focus w >> (withFocused $ windows . S.sink)))
-    , ((altMask, button4), (const $ windows S.swapUp))
-    , ((altMask, button5), (const $ windows S.swapDown))
+myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList
+    [ ((altMask, button1), \w -> focus w >> mouseMoveWindow w)
+    , ((altMask, button2), \w -> focus w >> mouseResizeWindow w)
+    , ((altMask, button3), \w -> focus w >> withFocused (windows . S.sink))
+    , ((altMask, button4), const $ windows S.swapUp)
+    , ((altMask, button5), const $ windows S.swapDown)
     ]
  
 -- put it all together
@@ -262,7 +282,7 @@ applyIMs :: (LayoutClass l Window) =>
             -> X ([(Window, Rectangle)], Maybe (l Window))
 applyIMs ratio props wksp rect = do
     let stack = S.stack wksp
-    let ws = S.integrate' $ stack
+    let ws = S.integrate' stack
     rosters <- filterM (hasAnyProperty props) ws
     let n = fromIntegral $ length rosters
     let (rostersRect, chatsRect) = splitHorizontallyBy (n * ratio) rect

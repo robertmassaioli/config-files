@@ -20,13 +20,13 @@ remote-repo-cache: /home/robert/.cabal/packages
 -- program-suffix: 
 -- library-vanilla: True
 -- library-profiling: False
--- shared: False
+shared: True
 -- executable-profiling: False
 -- optimization: True
 -- library-for-ghci: True
 -- split-objs: False
 -- executable-stripping: True
-user-install: False
+user-install: True
 -- package-db:
 -- flags:
 -- extra-include-dirs:

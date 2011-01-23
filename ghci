@@ -1,2 +1,5 @@
 :set prompt "$ "
 :set editor vim
+:m + Data.List
+:m + Control.Monad
+:m + System.IO

@@ -3,7 +3,7 @@ Config { font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
        , fgColor = "grey"
        , position = Top
        , lowerOnStart = True
-       , commands = [ Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+       , commands = [ Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 5
                     , Run Wireless "wlan0" ["--template","<essid> <quality>"] 10
                     , Run MultiCpu [
                                         "-L","3",

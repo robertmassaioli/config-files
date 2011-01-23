@@ -24,6 +24,10 @@ bindkey -e
 setopt extendedglob
 unsetopt CASE_GLOB
 
+# make the pushd commands second nature
+DIRSTACKSIZE=200
+setopt autopushd pushdsilent pushdtohome
+
 alias a="ls -1sh --color"
 alias :x="exit"
 alias :q="exit"
@@ -42,14 +46,16 @@ alias sai='sudo apt-get install'
 alias sl='svn log -l'
 alias svim='sudo vim'
 alias todoc='todo +children'
-alias up='sudo apt-get update && yes | sudo apt-get upgrade'
+alias up='sudo apt-get -y update && sudo apt-get -y upgrade'
 alias wake-server='wakeonlan 00:02:3f:16:16:ab'
 alias screens='screen -list'
 alias mutt='mutt -f email'
 alias xs='~/.xsettings'
-alias p='pushd'
 alias o='popd'
 alias dirs='dirs -v'
+alias cb='cabal build'
+alias cccb='cabal configure && cabal build'
+alias hibernate='sudo pm-hibernate --quirk-vbestate-restore'
 
 # Suffix Aliases
 alias -s -- txt='vim'
@@ -57,4 +63,8 @@ alias -s -- hs='vim'
 alias -s -- c='vim'
 alias -s -- h='vim'
 
-#export EDITOR="/usr/local/bin/vim"
+export EDITOR="/usr/local/bin/vim"
+export MAVEN_OPTS="-ea"
+
+export PATH="$HOME/.cabal/bin:$PATH"
+export PATH="$HOME/Interests/Chrome/depot_tools:$PATH"

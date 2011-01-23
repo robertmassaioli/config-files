@@ -1,1 +1,2 @@
-headers = on
+.header on
+.mode column
