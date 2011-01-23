@@ -51,11 +51,13 @@ alias wake-server='wakeonlan 00:02:3f:16:16:ab'
 alias screens='screen -list'
 alias mutt='mutt -f email'
 alias xs='~/.xsettings'
+alias p='pushd'
 alias o='popd'
 alias dirs='dirs -v'
 alias cb='cabal build'
 alias cccb='cabal configure && cabal build'
 alias hibernate='sudo pm-hibernate --quirk-vbestate-restore'
+alias last='last -a'
 
 # Suffix Aliases
 alias -s -- txt='vim'
